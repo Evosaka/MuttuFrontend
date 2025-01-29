@@ -1,74 +1,100 @@
-import { Image, StyleSheet, Platform } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
-}
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+  import React, { Component, useState } from "react";
+  import {
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    TextInput,
+    Alert,
+  } from "react-native";
+  import {Link} from 'expo-router'
+  
+  const ViewStyled = View;
+  const ImageStyled = Image;
+  const TextStyled = Text;
+  const ButtonStyled =  TouchableOpacity;
+  const TextInputStyled = TextInput;
+  const LinkStyled = Link;
+  
+  export default function HomeScreen() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+  
+    const Login = () => {
+      console.log("Email:", email);
+      console.log("Password:", password);
+    };
+  
+    const [loading, setLoading] = useState(false);
+  
+  
+    return (
+      <ViewStyled className={" flex-1 bg-red-200 justify-center"}>
+        <ViewStyled className={" items-center mt-6"}>
+          <TextStyled className={" text-[36px] text-initi-bluefText font-black"}>
+            Bem vindo de volta!
+          </TextStyled>
+        </ViewStyled>
+  
+        <ViewStyled className={" ml-14 mt-3"}>
+          <TextStyled className={" text-initi-bluefText font-bold text-lg"}>
+            Prencha suas credenciais:
+          </TextStyled>
+        </ViewStyled>
+  
+        <ViewStyled className={" items-center mt-6"}>
+          <TextInputStyled
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            className={
+              " border-2 border-initi-bluefText w-72 rounded-xl mb-6 h-14 p-4 text-base"
+            }
+          />
+          <TextInputStyled
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            className={
+              " border-2 border-initi-bluefText w-72 rounded-xl h-14 p-4 text-base text-initi-bluefText"
+            }
+          />
+        </ViewStyled>
+  
+        <ViewStyled className={" items-center m-2 pl-14 gap-x-16 flex-row "}>
+          <TextStyled className={" text-initi-bluefText"}>
+            Manter conectado
+          </TextStyled>
+          <TextStyled className={" text-initi-bluefText"}>
+            Esqueci a senha
+          </TextStyled>
+        </ViewStyled>
+  
+        <ViewStyled className=" items-center mt-6">
+          <ButtonStyled
+            disabled={loading}
+            
+            className=" bg-initi-bluefText w-48 h-12 rounded-[12px] justify-center"
+          >
+            <LinkStyled href="/dashboard" className=" text-center text-initi-bgGrey text-[20px] font-semibold">
+              {loading ? "Entrando..." : "Entrar"}
+            </LinkStyled>
+          </ButtonStyled>
+        </ViewStyled>
+  
+        <ViewStyled className={" justify-center gap-x-2 flex-row mt-6 "}>
+          <TextStyled className={" text-sm font-semibold text-initi-bluefText"}>
+            Não possui conta?
+          </TextStyled>
+          <ButtonStyled>
+            <TextStyled className={"text-sm text-initi-orange font-bold"}>
+              Clique aqui para criar!
+            </TextStyled>
+          </ButtonStyled>
+        </ViewStyled>
+      </ViewStyled>
+    );
+  }
