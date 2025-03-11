@@ -1,7 +1,7 @@
 
 
 
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -17,9 +17,46 @@ export default function Tdah() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [descriptionEscala, setDescriptionEscala] = useState('');
+  const [questionsEscala, setQuestionsEscala] = useState('');
+  const [nameEscala, setNameEscala] = useState('');
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('https://muttu-backend.vercel.app/api/all-scales');
+      const data = await response.json();
+      setData(data);
+      const escala = data.find((item: { id: number; }) => item.id === 1);
+      if (escala) {
+        setDescriptionEscala(escala.description);
+      }
+      const escala2 = data.find((item: { id: number; }) => item.id === 1);
+      if (escala2) {
+        setQuestionsEscala(escala2._count.questions);
+      }
+      const escala3 = data.find((item: { id: number; }) => item.id === 1);
+      if (escala3) {
+        setNameEscala(escala3.name);
+      }
+    };
+    fetchData();
+  }, []);
+
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  interface Escala {
+    id: number;
+    name: string;
+    description: string;
+    _count: {
+      questions: number;
+    };
+  }
   
   return (
     <View className={" flex-1 gap-2 bg-[#E8C4AC] justify-center"}>
@@ -30,40 +67,39 @@ export default function Tdah() {
 
       {isMenuOpen && (
         <View className="absolute top-24 left-5 bg-[#2D4990] p-4 w-48 shadow-lg rounded-lg z-50">
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 1</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 2</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 3</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 4</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 5</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 6</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity className="py-2">
-                    <Text className="text-lg text-initi-blue text-white">Botão 7</Text>
-                  </TouchableOpacity>
-                </View>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 1</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 2</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 3</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 4</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 5</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 6</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity className="py-2">
+                            <Text className="text-lg text-initi-blue text-white font-bold">Botão 7</Text>
+                          </TouchableOpacity>
+                        </View>
       )}
 
       <View className={" items-start ml-[24] absolute top-[370]"}>
         <Text className={"mt-[-240] text-[26px] text-center text-initi-bluefText font-serif"}>
-          Escala de TDAH
+           Escala de {nameEscala}
         </Text>
       </View>
 
       <View className="items-start ml-[24px] absolute top-[350]">
         <Text className="mt-[-160] text-[19px] text-initi-blue font-alegreya-sans text-lg">
-        Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição 
-        Descrição Descrição Descrição.
+        {descriptionEscala}
         </Text>
       </View>
 
@@ -71,6 +107,12 @@ export default function Tdah() {
       <View className="items-start ml-[24px] absolute top-[650]">
         <Text className="mt-[-160] text-[19px] text-initi-blue font-alegreya-sans text-lg">
           Deseja Iniciar esta escala?
+        </Text>
+      </View>
+
+      <View className="items-start ml-[24px] absolute top-[670]">
+        <Text className="mt-[-160] text-[14px] text-initi-blue font-alegreya-sans text-lg">
+          Numero de Questões: {questionsEscala}
         </Text>
       </View>
 
