@@ -14,6 +14,11 @@ import {
 import { Link, useLocalSearchParams } from 'expo-router'
 import { useRouter } from "expo-router";
 
+import { ParamListBase } from '@react-navigation/native';
+import { useAtom } from "jotai";
+import { scaleIdAtom } from "../stores";
+
+
 export default async function Home() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,6 +64,14 @@ export default async function Home() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const [scaleId, setScaleId] = useAtom(scaleIdAtom)
+
+  const handlePress = (id: string) => {
+    setScaleId(id);  // Salva o ID selecionado no Jotai
+    router.push("/tdah");  // Navega para a próxima tela
+  };
+
 
   return (
     <View className={" flex-1 gap-2 bg-[#E8C4AC] justify-center"}>
@@ -109,22 +122,22 @@ export default async function Home() {
   <ScrollView horizontal={true}  style={{ height: 130 }}>
     <View className="flex-row">
 
-      <TouchableOpacity onPress={() => router.push("/tdah") } style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }} >
+      <TouchableOpacity onPress={() =>  handlePress("1")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }} >
         <Image className="w-24 h-28 mx-[2]" source={require('@/assets/images/Happy.png')} resizeMode="contain" />
         <View className="mt-[-11] w-24"><Text className="text-center h-9">{nomeEscala}</Text></View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }} >
+      <TouchableOpacity onPress={() =>  handlePress("2")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }} >
         <Image className="w-24 h-28 mx-[2]" source={require('@/assets/images/Happy.png')} resizeMode="contain" />
         <View className="mt-[-11] w-24"><Text className="text-center h-9">{nomeEscala2}</Text></View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/tdah")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }} >
+      <TouchableOpacity onPress={() =>  handlePress("3")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }} >
         <Image className="w-24 h-28 mx-[2]" source={require('@/assets/images/Happy.png')} resizeMode="contain" />
         <View className="mt-[-11] w-24"><Text className="text-center h-9">{nomeEscala3}</Text></View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center'}} >
+      <TouchableOpacity onPress={() =>  handlePress("4")} style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center'}} >
         <Image className="w-24 h-28 mx-[2]" source={require('@/assets/images/Happy.png')} resizeMode="contain" />
         <View className="mt-[-11] w-24"><Text className="text-center h-9">H</Text></View>
       </TouchableOpacity>

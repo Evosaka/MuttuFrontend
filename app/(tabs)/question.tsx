@@ -13,6 +13,8 @@ import {
 import { Link, useLocalSearchParams } from 'expo-router'
 import { useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
+import { useAtom } from "jotai";
+import { scaleIdAtom } from "../stores";
 
 export default function Question() {
   const router = useRouter();
@@ -25,24 +27,29 @@ export default function Question() {
 
   const [data, setData] = useState<any>(null);
 
+    const [scaleId] = useAtom(scaleIdAtom); 
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://muttu-backend.vercel.app/api/scales/1');
+        const response = await fetch(`https://muttu-backend.vercel.app/api/scales/${scaleId}`);
         const result = await response.json();
         setData(result);
 
         if (result.questions && Array.isArray(result.questions)) {
-          const perguntas = result.questions.map((q: { id: number; text: string; options: string[]; }) => {
+          const perguntas = result.questions.map((q: { id: number; text: string; options: string[]; scaleId: number; }) => {
             return {
               id: q.id,
               text: q.text,
-              options: q.options || []
+              options: q.options || [],
+              scaleId: q.scaleId,
             };
           });
         
-          const question = perguntas.find((q: { id: number; }) => q.id === 1);
-          if (question) {
+          const question = perguntas.find((q: { id: number; scaleId: number }) => 
+            scaleId !== null && q.scaleId.toString() === scaleId.toString()
+          );          if (question) {
             
             setTextEscala(question.text);
 
