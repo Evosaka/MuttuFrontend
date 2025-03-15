@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
-import { Link } from "expo-router";
-import { useRouter } from "expo-router";
+import { Text, View, Image, TouchableOpacity, Alert } from "react-native";
+import { Link, useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { scaleIdAtom } from "../stores";
+import { scalesAtom, scaleIdAtom, Scale } from "../stores";
 
 export default function Tdah() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [descriptionEscala, setDescriptionEscala] = useState('');
-  const [questionsEscala, setQuestionsEscala] = useState('');
+  const [questionsEscala, setQuestionsEscala] = useState(0);
   const [nameEscala, setNameEscala] = useState('');
-  const [data, setData] = useState([]);
 
-  const [scaleId] = useAtom(scaleIdAtom); 
+  const [scales] = useAtom(scalesAtom);
+  const [scaleId] = useAtom(scaleIdAtom);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('https://muttu-backend.vercel.app/api/all-scales');
-      const data = await response.json();
-      setData(data);
-
-      const escala = data.find((item: { id: number }) => item.id.toString() === scaleId);
+    if (scaleId !== null) {
+      const escala = scales.find((item: Scale) => item.id === scaleId);
       if (escala) {
         setDescriptionEscala(escala.description);
         setQuestionsEscala(escala._count.questions);
         setNameEscala(escala.name);
+      } else {
+        Alert.alert("Erro", "Escala não encontrada.");
       }
-    };
-    fetchData();
-  }, [scaleId]);
+    }
+  }, [scaleId, scales]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -43,9 +39,15 @@ export default function Tdah() {
 
       {isMenuOpen && (
         <View className="absolute top-24 left-5 bg-[#2D4990] p-4 w-48 shadow-lg rounded-lg z-50">
-          <TouchableOpacity className="py-2"><Text className="text-lg text-white font-bold">Botão 1</Text></TouchableOpacity>
-          <TouchableOpacity className="py-2"><Text className="text-lg text-white font-bold">Botão 2</Text></TouchableOpacity>
-          <TouchableOpacity className="py-2"><Text className="text-lg text-white font-bold">Botão 3</Text></TouchableOpacity>
+          <TouchableOpacity className="py-2">
+            <Text className="text-lg text-white font-bold">Botão 1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="py-2">
+            <Text className="text-lg text-white font-bold">Botão 2</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="py-2">
+            <Text className="text-lg text-white font-bold">Botão 3</Text>
+          </TouchableOpacity>
         </View>
       )}
 
