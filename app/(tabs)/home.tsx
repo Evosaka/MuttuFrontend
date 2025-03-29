@@ -1,49 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity, ScrollView, Alert } from "react-native";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { scalesAtom, scaleIdAtom, Scale } from "../stores";
+import { scalesAtom, scaleIdAtom, Scale, questionsAtom } from "../stores";
+import { usernameAtom } from '../stores';
 
 export default function Home() {
   const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { username } = useLocalSearchParams();
 
-  const [scales] = useAtom(scalesAtom); // Dados das escalas carregados globalmente
+  const { username: usernameParam } = useLocalSearchParams();
+  const [username] = useAtom(usernameAtom);
+
+  const [scales] = useAtom(scalesAtom);
   const [, setScaleId] = useAtom(scaleIdAtom); // Função para definir o ID da escala selecionada
+  const [, setQuestions] = useAtom(questionsAtom);
 
   const handlePress = (id: number) => {
     setScaleId(id); // Define o ID da escala selecionada
-    router.push("/tdah"); // Navega para a tela de detalhes da escala
+    router.push({ pathname: "/tdah", params: { scaleId: id.toString() } }); // Passa o scaleId como parâmetro
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+
+console.log("scales:", scales);
 
   return (
     <View className="flex-1 gap-2 bg-[#E8C4AC] justify-center">
-      <TouchableOpacity onPress={toggleMenu} className="items-start ml-[20]">
-        <Image className="w-8 h-8 px-2 mt-[-290]" source={require('@/assets/images/iconmenu.png')} />
-      </TouchableOpacity>
-
-      {isMenuOpen && (
-        <View className="absolute top-24 left-5 bg-[#2D4990] p-4 w-48 shadow-lg rounded-lg z-50">
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-white font-bold">Botão 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-white font-bold">Botão 2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-white font-bold">Botão 3</Text>
-          </TouchableOpacity>
-        </View>
-      )}
 
       <View className="items-start ml-[24] absolute top-[370]">
         <Text className="mt-[-240] text-[22px] text-center text-initi-bluefText font-serif">
-          Bem vindo(a), {username}
+          Bem vindo(a) {username || usernameParam}!
         </Text>
       </View>
 
@@ -54,23 +39,59 @@ export default function Home() {
       </View>
 
       <View className="flex-row justify-center items-center absolute top-[220] ml-1 overflow-x-auto">
-        <ScrollView horizontal={true} style={{ height: 130 }}>
+        <ScrollView horizontal={true} style={{ height: 150 }}>
           <View className="flex-row">
             {scales.map((scale: Scale) => (
               <TouchableOpacity
-                key={scale.id}
-                onPress={() => handlePress(scale.id)}
-                style={{ width: 96, height: 108, justifyContent: 'center', alignItems: 'center', marginRight: 16 }}
-              >
+              key={scale.id}
+              onPress={() => {
+                if (scale.hasResponded) {
+                  // Exibe um alerta ou mensagem informando que a escala já foi concluída
+                  alert("Esta escala já foi concluída!");
+                } else {
+                  // Chama a função handlePress apenas se a escala não foi respondida
+                  handlePress(scale.id);
+                }
+              }}
+              disabled={scale.hasResponded} // Desabilita o botão se a escala já foi respondida
+              style={{
+                width: 96,
+                height: 130,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 16,
+              }}
+            >
+              {/* Container relativo para posicionar a imagem "correct" */}
+              <View className="gap-2" style={{ position: 'relative', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                {/* Imagem da escala com opacidade reduzida se já foi respondida */}
                 <Image
-                  className="w-24 h-28 mx-[2]"
+                  style={{
+                    width: 96,
+                    height: 108,
+                    opacity: scale.hasResponded ? 0.6 : 1, // Aplica opacidade apenas à imagem da escala
+                  }}
                   source={require('@/assets/images/Happy.png')}
                   resizeMode="contain"
                 />
-                <View className="mt-[-11] w-24">
-                  <Text className="text-center h-9">{scale.name}</Text>
+            
+                {/* Texto da escala */}
+                <View style={{ marginTop: -11, width: 96 }}>
+                  <Text style={{ textAlign: 'center', height: 36 }}>{scale.name}</Text>
                 </View>
-              </TouchableOpacity>
+            
+                {/* Condicional para mostrar a imagem "correct" */}
+                {scale.hasResponded && (
+                  <View style={{ position: 'absolute', top: 0, right: 0 }}>
+                    <Image
+                      style={{ width: 24, height: 24 }} // Tamanho menor para o canto superior direito
+                      source={require('@/assets/images/correct.png')}
+                      resizeMode="contain"
+                    />
+                  </View>
+                )}
+              </View>
+            </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
@@ -88,7 +109,7 @@ export default function Home() {
           source={require('@/assets/images/Pinkcard.png')}
           resizeMode="contain"
         />
-        <TouchableOpacity onPress={() => router.push("/")}>
+        <TouchableOpacity onPress={() => router.push("/resultquestion")}>
           <Image
             className="w-50 h-40 mt-[-110] ml-[-120]"
             source={require('@/assets/images/Watchnow.png')}

@@ -1,173 +1,169 @@
-
-
-
-import React, { Component, useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-} from "react-native";
-import { Link, useLocalSearchParams } from 'expo-router'
+import React, { useState, useEffect } from "react";
+import { Text, View, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import { ScrollView } from "react-native-gesture-handler";
 import { useAtom } from "jotai";
-import { scaleIdAtom } from "../stores";
+import { scaleIdAtom, scalesAtom, patientIdAtom } from "../stores";
 
-export default function Question() {
+interface Option {
+  text: string;
+  value: number;
+}
+
+interface Question {
+  id: number;
+  text: string;
+  options: Option[];
+  scaleId?: number;
+}
+
+export default function QuestionScreen() {
   const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<{ text: string; value: number }[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isFinishing, setIsFinishing] = useState(false);
 
+  const [scaleId] = useAtom(scaleIdAtom);
+  const [scales, setScales] = useAtom(scalesAtom);
+  const [patientId] = useAtom(patientIdAtom);
 
-  const [textEscala, setTextEscala] = useState('');
-  const [optionsEscala, setOptionsEscala] = useState ([] as string[]);
+  const selectedScale = scales.find((scale) => scale.id === scaleId);
+  const questions: Question[] = selectedScale?.questions || [];
+  const currentQuestion = questions[currentQuestionIndex];
 
-  const [data, setData] = useState<any>(null);
+  const handleNextQuestion = () => {
+    if (selectedOption === null) {
+      Alert.alert("Atenção", "Selecione uma opção antes de prosseguir.");
+      return;
+    }
 
-    const [scaleId] = useAtom(scaleIdAtom); 
-  
+    const isLastQuestion = currentQuestionIndex === questions.length - 1;
+    if (isLastQuestion) {
+      setIsFinishing(true);
+    }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://muttu-backend.vercel.app/api/scales/${scaleId}`);
-        const result = await response.json();
-        setData(result);
+    const selectedOptionData = currentQuestion.options[selectedOption];
+    setAnswers((prev) => [
+      ...prev,
+      {
+        text: selectedOptionData.text,
+        value: selectedOptionData.value,
+      },
+    ]);
 
-        if (result.questions && Array.isArray(result.questions)) {
-          const perguntas = result.questions.map((q: { id: number; text: string; options: string[]; scaleId: number; }) => {
-            return {
-              id: q.id,
-              text: q.text,
-              options: q.options || [],
-              scaleId: q.scaleId,
-            };
-          });
-        
-          const question = perguntas.find((q: { id: number; scaleId: number }) => 
-            scaleId !== null && q.scaleId.toString() === scaleId.toString()
-          );          if (question) {
-            
-            setTextEscala(question.text);
-
-            setOptionsEscala(question.options);
-          }
-        }
-        
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-  
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    if (!isLastQuestion) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+      setSelectedOption(null);
+    }
   };
 
+  useEffect(() => {
+    if (answers.length === questions.length && questions.length > 0 && !isSubmitting) {
+      sendAnswersToBackend();
+    }
+  }, [answers]);
 
+  const sendAnswersToBackend = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("https://muttu-backend.vercel.app/api/submit-scale-response", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          scaleId,
+          patientId,
+          answers: answers.map((answer) => String(answer.value)),
+        }),
+      });
 
-  
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Erro ao enviar respostas");
+      }
+
+      setScales((prevScales) =>
+        prevScales.map((scale) =>
+          scale.id === scaleId ? { ...scale, hasResponded: true } : scale
+        )
+      );
+
+      if (result.success) {
+        router.push({
+          pathname: "/resultquestion",
+          params: { result: JSON.stringify(result) },
+        });
+      } else if (result.error === "Patient has already completed this scale") {
+        Alert.alert("Atenção", "Você já respondeu essa escala anteriormente.");
+        router.push("/home");
+      }
+    } catch (error) {
+      console.error("Erro:", error);
+      Alert.alert("Erro", error instanceof Error ? error.message : "Erro desconhecido");
+    } finally {
+      setIsSubmitting(false);
+      setIsFinishing(false);
+    }
+  };
+
+  if (questions.length === 0) {
+    return (
+      <View className="flex-1 justify-center items-center bg-[#E8C4AC]">
+        <Text className="text-lg">Nenhuma questão disponível para esta escala.</Text>
+      </View>
+    );
+  }
+
   return (
-
-    <View className={" flex-1 gap-2 bg-[#E8C4AC] justify-center"}>
-
-     
-          
-
-      <TouchableOpacity onPress={toggleMenu} className={"items-start ml-[20] "}>
-        <Image className={"w-8 h-8 px-2 absolute top-[-10]"} source={require('@/assets/images/iconmenu.png')} />
-      </TouchableOpacity>
-
-      {isMenuOpen && (
-        <View className="absolute top-24 left-5 bg-[#2D4990] p-4 w-48 shadow-lg rounded-lg z-50">
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 3</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 4</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 5</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 6</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-initi-blue text-white font-bold">Botão 7</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      <View className={" items-start ml-[24] absolute top-[370]"}>
-        <Text className={"mt-[-260] text-[26px] text-left text-initi-bluefText font-serif"} >
-          {textEscala}
+    <View className="flex-1 gap-2 bg-[#E8C4AC] justify-center">
+      <View className="items-center mt-[20]">
+        <Text className="text-[22px] text-left text-initi-bluefText font-serif px-10">
+          {currentQuestion.text}
         </Text>
       </View>
-    
-      <View  className={" flex- items-center justify-center mt-72"}>
-         {optionsEscala.map((option, i) => <View className={" items-center mt-8"}>
-          <TouchableOpacity onPress={() => setSelectedOption(i)}>
-            <Text className={`px-2 py-3 w-[350] h-[50] text-[17px] text-center rounded-xl font-semibold ${selectedOption === 1 ? "bg-indigo-900 text-white" : "bg-[#2D4990] text-[#fdfeff]"}`}>
-              {option}
+
+      <View className="items-center mt-14">
+        {currentQuestion.options.map((option, index) => (
+          <TouchableOpacity
+            key={`option-${option.value}-${index}`}
+            className={`px-7 py-4 my-2 w-96 rounded-2xl ${
+              selectedOption === index ? "bg-[#1A3365]" : "bg-[#2D4990]"
+            }`}
+            onPress={() => setSelectedOption(index)}
+          >
+            <Text className="text-white text-center font-bold text-[17px]">
+              {option.text}
             </Text>
           </TouchableOpacity>
-        </View>)}
-        
-
-        <View className={"items-center mt-8 ml-[231]"}>
-          <TouchableOpacity
-            disabled={selectedOption === null}
-            className={`px-2 py-3 w-[120] h-[45] text-[17px] text-center rounded-xl font-semibold ${selectedOption === null ? "bg-gray-400" : "bg-[#2D4990]"
-              }`}
-          >
-            <Text className="text-[#fdfeff] text-[17px] text-center font-semibold">Continuar</Text>
-          </TouchableOpacity>
-        </View>
-
+        ))}
       </View>
 
-      <View className="absolute bottom-0 w-full">
-        <Image
-          className="w-full h-16 bg-cover"
-          source={require("@/assets/images/barranav.png")}
-        />
+      <View className="flex-row items-center justify-center mt-14">
+        <TouchableOpacity
+          className="px-6 py-3 mx-2 bg-[#2D4990] rounded-lg"
+          onPress={() => router.push("/")}
+        >
+          <Text className="text-white font-bold">Voltar</Text>
+        </TouchableOpacity>
 
-        <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
-          <TouchableOpacity onPress={() => router.push("/")}>
-            <Image
-              className="w-10 h-10"
-              source={require("@/assets/images/homee.png")}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push("/")}>
-            <Image
-              className="w-10 h-10"
-              source={require("@/assets/images/add.png")}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push("/")}>
-            <Image
-              className="w-10 h-10"
-              source={require("@/assets/images/conf.png")}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+        className={`px-6 py-3 mx-2 bg-[#2D4990] rounded-lg ${
+          isSubmitting ? "opacity-50" : ""
+        }`}
+        onPress={handleNextQuestion}
+        disabled={isSubmitting || isFinishing}
+      >
+        {isFinishing ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <Text className="text-white font-bold">
+            {currentQuestionIndex < questions.length - 1 ? "Próxima" : "Concluir"}
+          </Text>
+        )}
+      </TouchableOpacity>
       </View>
     </View>
   );

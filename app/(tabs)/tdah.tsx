@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, TouchableOpacity, Alert } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, scaleIdAtom, Scale } from "../stores";
 
 export default function Tdah() {
   const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [descriptionEscala, setDescriptionEscala] = useState('');
   const [questionsEscala, setQuestionsEscala] = useState(0);
   const [nameEscala, setNameEscala] = useState('');
 
   const [scales] = useAtom(scalesAtom);
-  const [scaleId] = useAtom(scaleIdAtom);
-
+  const [scaleId] = useAtom(scaleIdAtom); 
   useEffect(() => {
     if (scaleId !== null) {
       const escala = scales.find((item: Scale) => item.id === scaleId);
       if (escala) {
         setDescriptionEscala(escala.description);
-        setQuestionsEscala(escala._count.questions);
+        setQuestionsEscala(escala.questions ? escala.questions.length : 0);
         setNameEscala(escala.name);
       } else {
         Alert.alert("Erro", "Escala não encontrada.");
@@ -27,33 +25,14 @@ export default function Tdah() {
     }
   }, [scaleId, scales]);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  
 
   return (
     <View className="flex-1 gap-2 bg-[#E8C4AC] justify-center">
-      <TouchableOpacity onPress={toggleMenu} className="items-start ml-[20]">
-        <Image className="w-8 h-8 px-2 absolute top-[-230]" source={require('@/assets/images/iconmenu.png')} />
-      </TouchableOpacity>
-
-      {isMenuOpen && (
-        <View className="absolute top-24 left-5 bg-[#2D4990] p-4 w-48 shadow-lg rounded-lg z-50">
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-white font-bold">Botão 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-white font-bold">Botão 2</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="py-2">
-            <Text className="text-lg text-white font-bold">Botão 3</Text>
-          </TouchableOpacity>
-        </View>
-      )}
 
       <View className="items-start ml-[24] absolute top-[370]">
         <Text className="mt-[-240] text-[26px] text-center text-initi-bluefText font-serif">
-          Escala de {nameEscala}
+          {nameEscala}
         </Text>
       </View>
 
@@ -95,16 +74,13 @@ export default function Tdah() {
 
       <View className="absolute bottom-0 w-full">
         <Image className="w-full h-16 bg-cover" source={require("@/assets/images/barranav.png")} />
-
         <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
           <TouchableOpacity onPress={() => router.push("/")}>
             <Image className="w-10 h-10" source={require("@/assets/images/homee.png")} resizeMode="contain" />
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => router.push("/")}>
             <Image className="w-10 h-10" source={require("@/assets/images/add.png")} resizeMode="contain" />
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => router.push("/")}>
             <Image className="w-10 h-10" source={require("@/assets/images/conf.png")} resizeMode="contain" />
           </TouchableOpacity>
