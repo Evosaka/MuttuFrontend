@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Link, router } from 'expo-router';
 import { useAtom } from "jotai";
-import { scalesAtom, usernameAtom, patientIdAtom } from "../stores"; // Importe o patientIdAtom
+import { scalesAtom, usernameAtom, patientIdAtom, userIdAtom } from "../stores"; // Importe o patientIdAtom
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,22 +11,23 @@ export default function Login() {
   const [, setScales] = useAtom(scalesAtom); 
   const [, setUsername] = useAtom(usernameAtom);
   const [, setPatientId] = useAtom(patientIdAtom);
+  const [, setUserId] = useAtom(userIdAtom);
 
   async function handleLogin() {
     setLoading(true);
 
-    // Validação dos campos
-    // if (email === "" || password === "") {
-    //   Alert.alert("Erro", "Preencha todos os campos!");
-    //   setLoading(false);
-    //   return;
-    // }
+    //Validação dos campos
+    if (email === "" || password === "") {
+      Alert.alert("Erro", "Preencha todos os campos!");
+      setLoading(false);
+      return;
+    }
 
-    // if (password.length < 8) {
-    //   Alert.alert("Erro", "A senha deve ter no mínimo 8 caracteres!");
-    //   setLoading(false);
-    //   return;
-    // }
+    if (password.length < 8) {
+      Alert.alert("Erro", "A senha deve ter no mínimo 8 caracteres!");
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("https://muttu-backend.vercel.app/api/login", {
@@ -35,9 +36,8 @@ export default function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: 'psico@gmail.com',
-          // email: 'pablo2@gmail.com',
-          password: 'testesenha',
+          email: email,
+          password: password,
         }),
       });
 
@@ -47,6 +47,7 @@ export default function Login() {
       if (data.success) {
         setScales(data.scales); // Armazena as escalas no estado global
         setUsername(data.user.username); // Armazena o nome de usuário no estado global
+        setUserId(data.user.id); // Armazena o ID do usuário no estado global
         setPatientId(data.user.id); // Armazena o ID do paciente no estado global
 
         // Redireciona com base no role

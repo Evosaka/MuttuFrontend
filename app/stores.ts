@@ -58,3 +58,4 @@ export const patientIdAtom = atom<number | null>(null);
 export const usernameAtom = atom<number | null>(null); 
 export const questionsAtom = atom<Question[]>([]);
 export const resultAtom = atom<ScaleResult | null>(null);
+export const userIdAtom = atom<number | null>(null);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, TextInput, ScrollView, Alert, ActivityIndicator, Switch } from "react-native";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { scalesAtom, usernameAtom } from "../stores";
+import { scalesAtom, userIdAtom, usernameAtom } from "../stores";
 
 interface Question {
   text: string;
@@ -22,6 +22,7 @@ interface ScoreRange {
 export default function CreateScale() {
   const router = useRouter();
   const [username] = useAtom(usernameAtom);
+  const [userId] = useAtom(userIdAtom);
   const [scales, setScales] = useAtom(scalesAtom);
   const [loading, setLoading] = useState(false);
 
@@ -142,8 +143,7 @@ export default function CreateScale() {
   const createScale = async () => {
     if (!validateForm()) return;
   
-    const userId = Number(username);
-    if (isNaN(userId)) {
+    if (userId === null) {
       Alert.alert("Erro", "ID de usuário inválido. Faça login novamente.");
       return;
     }
@@ -151,11 +151,10 @@ export default function CreateScale() {
     setLoading(true);
   
     try {
-      // Obter o token do armazenamento (você precisa implementar isso)
-      const token = "seu-token-jwt-aqui"; // Substitua pela forma como você armazena o token
-  
       const scaleData = {
         name: scaleName,
+        description: scaleDescription,
+        type: isNumericType ? "NUMERIC" : "GENERAL", // Alterado para GENERAL
         questions: questions.map(question => ({
           text: question.text,
           options: question.options.map(option => ({
@@ -163,21 +162,23 @@ export default function CreateScale() {
             value: option.value
           }))
         })),
-        psychologist: {
-          id: userId,
-          username: username // Assumindo que username é o nome do psicólogo
-        },
-        // Inclua outros campos que a API possa esperar
-        ...(isNumericType && { scoreRanges }) // Inclui scoreRanges apenas se for tipo numérico
+        createdBy: userId,
+        ...(isNumericType && { 
+          scoreRanges: scoreRanges.map(range => ({
+            minScore: range.minScore,
+            maxScore: range.maxScore,
+            result: range.result,
+            description: range.description
+          })) 
+        })
       };
   
-      console.log("Dados sendo enviados:", scaleData); // Para depuração
+      console.log("Dados sendo enviados:", scaleData);
   
       const response = await fetch("https://muttu-backend.vercel.app/api/scales", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(scaleData)
       });
@@ -192,7 +193,7 @@ export default function CreateScale() {
       Alert.alert("Sucesso", "Escala criada com sucesso!");
       setScales([...scales, data]);
       resetForm();
-      router.push("/psico");
+      router.push("/scalesucces");
   
     } catch (error) {
       console.error("Erro ao criar escala:", error);
