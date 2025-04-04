@@ -1,0 +1,15 @@
+{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease",
+        "distribution": "internal"
+      }
+    },
+    "production": {}
+  },
+  "cli": {
+    "version": ">= 6.0.0" 
+  }
+}

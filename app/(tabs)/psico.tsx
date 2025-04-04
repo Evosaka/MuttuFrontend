@@ -74,7 +74,6 @@ export default function Psico() {
 
       const data = await response.json();
       if (data.success) {
-        Alert.alert("Sucesso", "Escala criada com sucesso!");
         setScales([...scales, data.scale]); // Atualiza a lista de escalas
         setScaleName("");
         setScaleDescription("");
@@ -99,7 +98,7 @@ export default function Psico() {
         </Text>
       </View>
 
-      <View className="items-start mt-10">
+      <View className="items-start mt-16">
         <Text className="text-[17px] text-initi-blue font-serif">
           Este é um espaço para você psicólogo, aqui você pode criar escalas para ajudar seus pacientes a saber oque estão sentindo e saber como lidar com os seus sentimentos, compartilhando-o com profissionais como você!
         </Text>
@@ -109,7 +108,7 @@ export default function Psico() {
               <Image className="w-28 h-28" source={require('@/assets/images/logo-muttu.png')} />
             </View> */}
 
-      <View className="items-start mt-10">
+      <View className="items-start mt-20">
         <Text className="text-[17px] text-initi-blue font-serif text-center">
           Clique no botão '+' abaixo para poder criar uma escala.
         </Text>
@@ -124,34 +123,48 @@ export default function Psico() {
       
     </View>
      <View className="absolute bottom-0 w-full">
-            <Image
-              className="w-full h-16 bg-cover"
-              source={require("@/assets/images/barranav.png")}
-            />
-            <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
-              <TouchableOpacity onPress={() => router.push("/psico")}>
-                <Image
-                  className="w-10 h-10"
-                  source={require("@/assets/images/homee.png")}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.push("/createscale")}>
-                <Image
-                  className="w-10 h-10"
-                  source={require("@/assets/images/add.png")}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.push("/")}>
-                <Image
-                  className="w-10 h-10"
-                  source={require("@/assets/images/conf.png")}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+             <Image
+               className="w-full h-16 bg-cover"
+               source={require("@/assets/images/barranav.png")}
+             />
+             <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
+               <TouchableOpacity onPress={() => router.push("/psico")}>
+                 <Image
+                   className="w-10 h-10"
+                   source={require("@/assets/images/homee.png")}
+                   resizeMode="contain"
+                 />
+               </TouchableOpacity>
+               <TouchableOpacity onPress={() => router.push("/psico")}>
+                 <Image
+                   className="w-8 h-8"
+                   source={require("@/assets/images/cere.png")}
+                   resizeMode="contain"
+                 />
+               </TouchableOpacity>
+               <TouchableOpacity onPress={() => router.push("/createscale")}>
+                 <Image
+                   className="w-10 h-10"
+                   source={require("@/assets/images/add.png")}
+                   resizeMode="contain"
+                 />
+               </TouchableOpacity>
+               <TouchableOpacity onPress={() => router.push("/listpatient")}>
+                 <Image
+                   className="w-12 h-12"
+                   source={require("@/assets/images/fig.webp")}
+                   resizeMode="contain"
+                 />
+               </TouchableOpacity>
+               <TouchableOpacity onPress={() => router.push("/psico")}>
+                 <Image
+                   className="w-10 h-10"
+                   source={require("@/assets/images/conf.png")}
+                   resizeMode="contain"
+                 />
+               </TouchableOpacity>
+             </View>
+           </View>
           
           </>
   );

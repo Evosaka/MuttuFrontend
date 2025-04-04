@@ -402,7 +402,7 @@ export default function CreateScale() {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/")}>
+          <TouchableOpacity onPress={() => router.push("/createscale")}>
             <Image
               className="w-8 h-8"
               source={require("@/assets/images/cere.png")}
@@ -423,7 +423,7 @@ export default function CreateScale() {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/")}>
+          <TouchableOpacity onPress={() => router.push("/createscale")}>
             <Image
               className="w-10 h-10"
               source={require("@/assets/images/conf.png")}

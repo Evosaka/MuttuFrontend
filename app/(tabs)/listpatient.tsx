@@ -111,7 +111,6 @@ export default function PatientScaleAssociation() {
       const isAssociated = associations[patientId]?.some(a => a.scaleId === scaleId);
   
       if (isAssociated) {
-        console.log("Tentando desassociar:", patientId, scaleId);
         
         const response = await fetch(`https://muttu-backend.vercel.app/api/desassociate-scale`, {
           method: "POST",
@@ -126,7 +125,6 @@ export default function PatientScaleAssociation() {
         });
   
         const data = await response.text();
-        console.log("Resposta da API:", response.status, data);
   
         if (!response.ok) throw new Error(`Erro ao desassociar: ${response.status}`);
   
@@ -136,7 +134,6 @@ export default function PatientScaleAssociation() {
         }));
   
       } else {
-        console.log("Tentando associar:", patientId, scaleId);
   
         const response = await fetch(`https://muttu-backend.vercel.app/api/associate-scale`, {
           method: "POST",
@@ -152,7 +149,6 @@ export default function PatientScaleAssociation() {
         });
   
         const data = await response.json();
-        console.log("Resposta da API (associar):", data);
   
         if (!response.ok) throw new Error(`Erro ao associar: ${response.status}`);
   
@@ -264,34 +260,48 @@ export default function PatientScaleAssociation() {
       </ScrollView>
 
       <View className="absolute bottom-0 w-full">
-        <Image
-          className="w-full h-16 bg-cover"
-          source={require("@/assets/images/barranav.png")}
-        />
-        <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
-          <TouchableOpacity onPress={() => router.push("/psico")}>
-            <Image
-              className="w-10 h-10"
-              source={require("@/assets/images/homee.png")}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/createscale")}>
-            <Image
-              className="w-10 h-10"
-              source={require("@/assets/images/add.png")}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/")}>
-            <Image
-              className="w-10 h-10"
-              source={require("@/assets/images/conf.png")}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+              <Image
+                className="w-full h-16 bg-cover"
+                source={require("@/assets/images/barranav.png")}
+              />
+              <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
+                <TouchableOpacity onPress={() => router.push("/psico")}>
+                  <Image
+                    className="w-10 h-10"
+                    source={require("@/assets/images/homee.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/listpatient")}>
+                  <Image
+                    className="w-8 h-8"
+                    source={require("@/assets/images/cere.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/createscale")}>
+                  <Image
+                    className="w-10 h-10"
+                    source={require("@/assets/images/add.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/listpatient")}>
+                  <Image
+                    className="w-12 h-12"
+                    source={require("@/assets/images/fig.webp")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/listpatient")}>
+                  <Image
+                    className="w-10 h-10"
+                    source={require("@/assets/images/conf.png")}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
     </View>
   );
 }

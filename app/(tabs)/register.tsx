@@ -65,7 +65,6 @@ export default function Register() {
     if (data.success) {
       Signin();
       setLoading(false);
-      Alert.alert("Cadastro efetuado com sucesso!");
       router.push({ pathname: "/home", params: { username: data.user.username } });
     }
     console.log("Email:", email);
