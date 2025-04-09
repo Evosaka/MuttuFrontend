@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { Link, router } from 'expo-router';
 import { useAtom } from "jotai";
-import { scalesAtom, usernameAtom, patientIdAtom, userIdAtom } from "../stores"; // Importe o patientIdAtom
+import { scalesAtom, usernameAtom, patientIdAtom, userIdAtom, emailidAtom } from "../stores"; // Importe o patientIdAtom
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,6 +12,7 @@ export default function Login() {
   const [, setUsername] = useAtom(usernameAtom);
   const [, setPatientId] = useAtom(patientIdAtom);
   const [, setUserId] = useAtom(userIdAtom);
+  const [, setEmailid] = useAtom(emailidAtom);
 
   async function handleLogin() {
     setLoading(true);
@@ -49,10 +50,11 @@ export default function Login() {
         setUsername(data.user.username); // Armazena o nome de usuário no estado global
         setUserId(data.user.id); // Armazena o ID do usuário no estado global
         setPatientId(data.user.id); // Armazena o ID do paciente no estado global
+        setEmailid(data.user.email); // Armazena o email do paciente no estado global
 
         // Redireciona com base no role
         if (data.user.role === "PSYCHOLOGIST") {
-          router.push({ pathname: "/psico", params: { username: data.user.username } });
+          router.push({ pathname: "/psico",  params: { username: data.user.username } });
         } else if (data.user.role === "PATIENT") {
           router.push({ pathname: "/home", params: { username: data.user.username } });
         } else {

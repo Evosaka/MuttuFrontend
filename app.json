@@ -4,11 +4,11 @@
     "slug": "Muttu",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo-muttu.png",
+    "icon": "./assets/images/logomuttu.png",
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-logo-muttu.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/logomuttu.png",
+        "backgroundColor": "#E8C4AC"
       },
       "package": "com.pabloevo.Muttu",
       "versionCode": 1
@@ -18,10 +18,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/logo-muttu.png",
+          "image": "./assets/images/logomuttu.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#E8C4AC"
         }
       ]
     ],

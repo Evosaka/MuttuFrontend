@@ -14,6 +14,7 @@ import { Stack } from 'expo-router';
          <Stack.Screen name="listpatient" options={{ headerShown: false }}/>
          <Stack.Screen name="resultquestion" options={{ headerShown: false }} /> 
          <Stack.Screen name="scalesucces" options={{ headerShown: false }}/>
+         <Stack.Screen name="config" options={{ headerShown: false }}/>
        </Stack>
      );
    }

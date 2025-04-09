@@ -3,6 +3,7 @@ import { Text, View, Image, TouchableOpacity, Alert } from "react-native";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, scaleIdAtom, Scale } from "../stores";
+import BottomNavBar from "./navbarPa";
 
 export default function Tdah() {
   const router = useRouter();
@@ -72,49 +73,7 @@ export default function Tdah() {
         </View>
       </View>
 
-      <View className="absolute bottom-0 w-full">
-              <Image
-                className="w-full h-16 bg-cover"
-                source={require("@/assets/images/barranav.png")}
-              />
-              <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
-                <TouchableOpacity onPress={() => router.push("/home")}>
-                  <Image
-                    className="w-10 h-10"
-                    source={require("@/assets/images/homee.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/tdah")}>
-                  <Image
-                    className="w-8 h-8"
-                    source={require("@/assets/images/cere.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/tdah")}>
-                  <Image
-                    className="w-10 h-10"
-                    source={require("@/assets/images/add.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/tdah")}>
-                  <Image
-                    className="w-12 h-12"
-                    source={require("@/assets/images/fig.webp")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/tdah")}>
-                  <Image
-                    className="w-10 h-10"
-                    source={require("@/assets/images/conf.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+      <BottomNavBar />
     </View>
   );
 }

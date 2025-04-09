@@ -3,6 +3,7 @@ import { Text, View, Image, TouchableOpacity, ScrollView, ActivityIndicator, Ale
 import { useRouter, useFocusEffect } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, usernameAtom, } from '../stores';
+import BottomNavBarPS from "./navbarPs";
 
 interface User {
   id: number;
@@ -37,17 +38,17 @@ export default function PatientScaleAssociation() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [associations, setAssociations] = useState<{ [key: number]: Association[] }>({});
-  const [processingAssociation, setProcessingAssociation] = useState<{ 
-    patientId: number | null; 
-    scaleId: number | null 
+  const [processingAssociation, setProcessingAssociation] = useState<{
+    patientId: number | null;
+    scaleId: number | null
   }>({ patientId: null, scaleId: null });
 
   const handleResponse = async (response: Response) => {
     const text = await response.text();
-    
+
     // Tratar resposta vazia para DELETE bem-sucedido
     if (response.status === 204) return { success: true };
-    
+
     try {
       const data = text ? JSON.parse(text) : {};
       if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
@@ -87,8 +88,8 @@ export default function PatientScaleAssociation() {
     } catch (err) {
       let errorMessage = "Erro ao carregar dados";
       if (err instanceof Error) {
-        errorMessage = err.message.startsWith("Resposta inválida:") 
-          ? "Formato de resposta inesperado do servidor" 
+        errorMessage = err.message.startsWith("Resposta inválida:")
+          ? "Formato de resposta inesperado do servidor"
           : err.message;
       }
       setError(errorMessage);
@@ -106,55 +107,55 @@ export default function PatientScaleAssociation() {
 
   const handleAssociation = async (patientId: number, scaleId: number) => {
     setProcessingAssociation({ patientId, scaleId });
-  
+
     try {
       const isAssociated = associations[patientId]?.some(a => a.scaleId === scaleId);
-  
+
       if (isAssociated) {
-        
+
         const response = await fetch(`https://muttu-backend.vercel.app/api/desassociate-scale`, {
           method: "POST",
-          headers: { 
+          headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           },
-          body: JSON.stringify({ 
-            userId: patientId, 
-            scaleId 
+          body: JSON.stringify({
+            userId: patientId,
+            scaleId
           }),
         });
-  
+
         const data = await response.text();
-  
+
         if (!response.ok) throw new Error(`Erro ao desassociar: ${response.status}`);
-  
+
         setAssociations(prev => ({
           ...prev,
           [patientId]: prev[patientId].filter(a => a.scaleId !== scaleId)
         }));
-  
+
       } else {
-  
+
         const response = await fetch(`https://muttu-backend.vercel.app/api/associate-scale`, {
           method: "POST",
-          headers: { 
+          headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           },
-          body: JSON.stringify({ 
-            userId: patientId, 
+          body: JSON.stringify({
+            userId: patientId,
             scaleId,
             therapist: username
           }),
         });
-  
+
         const data = await response.json();
-  
+
         if (!response.ok) throw new Error(`Erro ao associar: ${response.status}`);
-  
+
         setAssociations(prev => ({
           ...prev,
-          [patientId]: [...(prev[patientId] || []), { 
+          [patientId]: [...(prev[patientId] || []), {
             id: Date.now(),
             userId: patientId,
             scaleId,
@@ -164,16 +165,16 @@ export default function PatientScaleAssociation() {
           }]
         }));
       }
-  
+
     } catch (error) {
       console.error('Erro detalhado:', error);
-      Alert.alert("Erro","Operação falhou. Tente novamente.");
+      Alert.alert("Erro", "Operação falhou. Tente novamente.");
       loadData();
     } finally {
       setProcessingAssociation({ patientId: null, scaleId: null });
     }
   };
-  
+
 
   const isScaleAssociated = (patientId: number, scaleId: number) => {
     return associations[patientId]?.some(a => a.scaleId === scaleId);
@@ -200,9 +201,9 @@ export default function PatientScaleAssociation() {
 
   return (
     <View className="flex-1 bg-[#E8C4AC]">
-      <ScrollView className="p-4">
+      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 60 }}>
         <Text className="text-2xl font-bold text-[#2D4990] mb-4 mt-16">Pacientes</Text>
-        
+
         {patients.map((patient) => (
           <View key={patient.id} className="mb-4 bg-[#ffffff7b] rounded-lg p-4">
             <TouchableOpacity onPress={() => setSelectedPatient(patient.id === selectedPatient ? null : patient.id)}>
@@ -218,11 +219,11 @@ export default function PatientScaleAssociation() {
             {selectedPatient === patient.id && (
               <View className="mt-4">
                 <Text className="text-md font-bold text-[#2D4990] mb-2">Escalas Disponíveis</Text>
-                
+
                 {scales.map((scale) => {
                   const associated = isScaleAssociated(patient.id, scale.id);
-                  const isProcessing = processingAssociation.patientId === patient.id && 
-                                    processingAssociation.scaleId === scale.id;
+                  const isProcessing = processingAssociation.patientId === patient.id &&
+                    processingAssociation.scaleId === scale.id;
 
                   return (
                     <TouchableOpacity
@@ -232,24 +233,29 @@ export default function PatientScaleAssociation() {
                       disabled={isProcessing}
                     >
                       <View className="flex-row justify-between items-center">
-                        <View>
+                        <View className="flex-1 pr-4">
                           <Text className={`font-medium ${associated ? 'text-red-600' : 'text-green-600'}`}>
                             {scale.name}
                           </Text>
-                          <Text className="text-gray-600 text-sm">{scale.description}</Text>
-                        </View>
-                        
-                        {isProcessing ? (
-                          <ActivityIndicator 
-                            size="small" 
-                            color={associated ? '#dc2626' : '#16a34a'} 
-                          />
-                        ) : (
-                          <Text className={`font-bold ${associated ? 'text-red-600' : 'text-green-600'}`}>
-                            {associated ? 'REMOVER' : 'ASSOCIAR'}
+                          <Text className="text-gray-600 text-sm">
+                            {scale.description}
                           </Text>
-                        )}
+                        </View>
+
+                        <View className="justify-center items-center">
+                          {isProcessing ? (
+                            <ActivityIndicator
+                              size="small"
+                              color={associated ? '#dc2626' : '#16a34a'}
+                            />
+                          ) : (
+                            <Text className={`font-bold ${associated ? 'text-red-600' : 'text-green-600'}`}>
+                              {associated ? 'REMOVER' : 'ASSOCIAR'}
+                            </Text>
+                          )}
+                        </View>
                       </View>
+
                     </TouchableOpacity>
                   );
                 })}
@@ -259,49 +265,7 @@ export default function PatientScaleAssociation() {
         ))}
       </ScrollView>
 
-      <View className="absolute bottom-0 w-full">
-              <Image
-                className="w-full h-16 bg-cover"
-                source={require("@/assets/images/barranav.png")}
-              />
-              <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
-                <TouchableOpacity onPress={() => router.push("/psico")}>
-                  <Image
-                    className="w-10 h-10"
-                    source={require("@/assets/images/homee.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/listpatient")}>
-                  <Image
-                    className="w-8 h-8"
-                    source={require("@/assets/images/cere.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/createscale")}>
-                  <Image
-                    className="w-10 h-10"
-                    source={require("@/assets/images/add.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/listpatient")}>
-                  <Image
-                    className="w-12 h-12"
-                    source={require("@/assets/images/fig.webp")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push("/listpatient")}>
-                  <Image
-                    className="w-10 h-10"
-                    source={require("@/assets/images/conf.png")}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+      <BottomNavBarPS />
     </View>
   );
 }

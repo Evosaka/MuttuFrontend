@@ -4,6 +4,7 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, scaleIdAtom, Scale } from "../stores";
 import { usernameAtom } from '../stores';
+import BottomNavBarPS from "./navbarPs";
 
 export default function Psico() {
   const router = useRouter();
@@ -90,7 +91,8 @@ export default function Psico() {
   return (
     <>
     <View className="flex-1 bg-[#E8C4AC] p-4">
-      {/* Cabeçalho */}
+     
+
       <ScrollView className="mt-4">
       <View className="items-start mt-20">
         <Text className="text-[22px] text-initi-bluefText font-serif">
@@ -122,49 +124,7 @@ export default function Psico() {
 
       
     </View>
-     <View className="absolute bottom-0 w-full">
-             <Image
-               className="w-full h-16 bg-cover"
-               source={require("@/assets/images/barranav.png")}
-             />
-             <View className="absolute bottom-0 w-full h-16 flex-row justify-around items-center">
-               <TouchableOpacity onPress={() => router.push("/psico")}>
-                 <Image
-                   className="w-10 h-10"
-                   source={require("@/assets/images/homee.png")}
-                   resizeMode="contain"
-                 />
-               </TouchableOpacity>
-               <TouchableOpacity onPress={() => router.push("/psico")}>
-                 <Image
-                   className="w-8 h-8"
-                   source={require("@/assets/images/cere.png")}
-                   resizeMode="contain"
-                 />
-               </TouchableOpacity>
-               <TouchableOpacity onPress={() => router.push("/createscale")}>
-                 <Image
-                   className="w-10 h-10"
-                   source={require("@/assets/images/add.png")}
-                   resizeMode="contain"
-                 />
-               </TouchableOpacity>
-               <TouchableOpacity onPress={() => router.push("/listpatient")}>
-                 <Image
-                   className="w-12 h-12"
-                   source={require("@/assets/images/fig.webp")}
-                   resizeMode="contain"
-                 />
-               </TouchableOpacity>
-               <TouchableOpacity onPress={() => router.push("/psico")}>
-                 <Image
-                   className="w-10 h-10"
-                   source={require("@/assets/images/conf.png")}
-                   resizeMode="contain"
-                 />
-               </TouchableOpacity>
-             </View>
-           </View>
+      <BottomNavBarPS />
           
           </>
   );
