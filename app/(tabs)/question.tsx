@@ -144,7 +144,7 @@ export default function QuestionScreen() {
       <View className="flex-row items-center justify-center mt-14">
         <TouchableOpacity
           className="px-6 py-3 mx-2 bg-[#2D4990] rounded-lg"
-          onPress={() => router.push("/")}
+          onPress={() => router.push("/home")}
         >
           <Text className="text-white font-bold">Voltar</Text>
         </TouchableOpacity>

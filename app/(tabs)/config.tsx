@@ -72,13 +72,13 @@ export default function Config() {
                 </View>
 
                 <View className="items-start ml-6 mt-10">
-                    <Text className="text-[22px] text-initi-blue font-alegreya-sans text-white">
+                    <Text className="text-[25px] text-initi-blue font-alegreya-sans text-white font-serif">
                         Informações Muttu:
                     </Text>
                 </View>
 
                 <View className="items-start ml-6 mt-1">
-                    <Text className="text-[10px] font-alegreya-sans " style={{ color: '#d3d3d3', textAlign: 'justify' }}>
+                    <Text className="text-[12px] font-alegreya-sans " style={{ color: '#d3d3d3', textAlign: 'justify' }}>
                         Somos psicólogos especializados em Mapeamento de Saúde Mental e intervenções psicológicas para empresas, com foco na promoção do bem-estar e na adequação às normas trabalhistas.
                         Desde a aprovação da Lei 14.831, em março de 2024, e em conformidade com a NR-1, a Muttu tem auxiliado empresas na identificação de riscos psicossociais e na implementação de estratégias eficazes para a saúde mental no ambiente corporativo.
                     </Text>

@@ -105,24 +105,15 @@ export default function Home() {
   {/* Botão "Verificar" por cima da imagem */}
   <TouchableOpacity
     onPress={() => router.push("/resultquestion")}
-    className="absolute bottom-10 mt-12 left-10 ml-6"
+    className="absolute bottom-10 left-10 ml- 6"
   >
     <Image
-      className="w-50 h-40"
+      className="w-50 h-50 -mt-80 ml-8"
       source={require('@/assets/images/Watchnow.png')}
       resizeMode="contain"
     />
   </TouchableOpacity>
 </View>
-
-
-     
-
-      <View className="items-center mt-">
-        <Link href="https://muttu.com.br/" className=" text-lg font-alegreya-sans mt-">
-          <Text style={{ color: '#2e799f', textDecorationLine: 'underline' }}>Clique aqui e visite nosso site!</Text>
-        </Link>
-      </View>
 
       <BottomNavBar />
     </View>
