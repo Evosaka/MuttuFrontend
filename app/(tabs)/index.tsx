@@ -35,9 +35,9 @@ export default function Welcome() {
     return (
       <View className="flex-1 justify-center items-center bg-[#E8C4AC]">
         <Text className="text-[20px] text-center">
-          Carrecando Dados Muttu!
+          Carregando Dados Muttu...
         </Text>
-        <Image className="w-20 h-20" source={require('@/assets/images/logo-muttu.png')} />
+        <Image className="w-14 h-14" source={require('@/assets/images/logo-muttu.png')} />
       </View>
     );
   }
