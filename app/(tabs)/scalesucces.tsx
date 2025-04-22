@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, Image, TouchableOpacity} from "react-native";
+import { Text, View,TouchableOpacity} from "react-native";
 import { useRouter } from "expo-router";
 import BottomNavBarPS from "./navbarPs";
 
@@ -18,13 +18,13 @@ export default function Psico() {
       </View>
 
       <View className="items-start mt-5">
-        <Text className="text-[15px] text-initi-blue font-serif text-left">
+        <Text className="text-[15px] font-serif text-left">
             Agora você pode associar a sua escala criada a um paciente, clique em escala para fazer a associação.
         </Text>
       </View>
 
       <View className="items-start mt-20">
-        <Text className="text-[18px] text-initi-blue font-serif text-center">
+        <Text className="text-[18px] font-serif text-center">
             Deseja criar outra escala ou ver a lista de escalas?
         </Text>
       </View>

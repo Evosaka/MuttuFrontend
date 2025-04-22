@@ -50,6 +50,10 @@ export interface ScaleResult {
   result: string;
   resultDescription: string;
 }
+export interface Patient {
+  id: number;
+  name: string;
+}
 
 // Atoms
 export const scaleIdAtom = atom<number | null>(null);
@@ -60,3 +64,4 @@ export const questionsAtom = atom<Question[]>([]);
 export const resultAtom = atom<ScaleResult | null>(null);
 export const userIdAtom = atom<number | null>(null);
 export const emailidAtom = atom<string | null>(null);
+export const patientsAtom = atom<Patient[]>([]);

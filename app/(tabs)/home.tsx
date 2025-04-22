@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, scaleIdAtom, Scale, questionsAtom } from "../stores";
 import { usernameAtom } from '../stores';
@@ -34,7 +34,7 @@ export default function Home() {
       </View>
 
       <View className="items-start ml-6 mt-6">
-        <Text className="text-[19px] text-initi-blue font-alegreya-sans text-lg">
+        <Text className="text-[19px]font-alegreya-sans text-lg">
           Escalas
         </Text>
       </View>
@@ -46,12 +46,12 @@ export default function Home() {
               <TouchableOpacity
                 key={scale.id}
                 onPress={() => {
-                  if (scale.hasResponded) {
-                  } else {
+                  // if (scale.hasResponded) {
+                  // } else {
                     handlePress(scale.id);
-                  }
+                  // }
                 }}
-                disabled={scale.hasResponded}
+                // disabled={scale.hasResponded}
                 style={{
                   width: 96,
                   height: 130,
@@ -65,7 +65,7 @@ export default function Home() {
                     style={{
                       width: 96,
                       height: 108,
-                      opacity: scale.hasResponded ? 0.6 : 1,
+                      // opacity: scale.hasResponded ? 0.6 : 1,
                     }}
                     source={require('@/assets/images/Happy.png')}
                     resizeMode="contain"
@@ -77,7 +77,7 @@ export default function Home() {
                     <View style={{ position: 'absolute', top: 0, right: 0 }}>
                       <Image
                         style={{ width: 24, height: 24 }}
-                        source={require('@/assets/images/correct.png')}
+                        // source={require('@/assets/images/correct.png')}
                         resizeMode="contain"
                       />
                     </View>
@@ -90,7 +90,7 @@ export default function Home() {
       </View>
 
       <View className="items-start ml-6 mt-4 mb-10">
-        <Text className="text-[19px] text-initi-blue font-alegreya-sans text-lg">
+        <Text className="text-[19px] font-alegreya-sans text-lg">
           Lembretes
         </Text>
       </View>
@@ -102,7 +102,6 @@ export default function Home() {
     resizeMode="contain"
   />
 
-  {/* Botão "Verificar" por cima da imagem */}
   <TouchableOpacity
     onPress={() => router.push("/resultquestion")}
     className="absolute bottom-10 left-10 ml- 6"

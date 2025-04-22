@@ -1,7 +1,6 @@
 import React from "react";
 import { Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter, useLocalSearchParams, Link } from "expo-router";
-import BottomNavBar from "./navbarPa";
 import { usernameAtom, emailidAtom } from "../stores";
 import { useAtom } from "jotai";
 
@@ -37,18 +36,18 @@ export default function Config() {
             </View>
 
             <ScrollView
-                className="flex-1 pt-20" // Padding-top igual à altura da TopBar
-                contentContainerStyle={{ paddingBottom: 80 }} // Espaço para o BottomNavBar
+                className="flex-1 pt-20"
+                contentContainerStyle={{ paddingBottom: 80 }}
             >
 
                 <View className="items-start ml-6 mt-8">
-                    <Text className="text-[25px] text-initi-blue font-alegreya-sans text-white font-serif">
+                    <Text className="text-[25px] font-alegreya-sans text-white font-serif">
                         Informações Pessoais:
                     </Text>
                 </View>
 
                 <View className="items-start ml-6 mt-4">
-                    <Text className="text-[22px] text-initi-blue font-alegreya-sans text-white">
+                    <Text className="text-[22px] font-alegreya-sans text-white">
                         Nome
                     </Text>
                 </View>
@@ -60,19 +59,19 @@ export default function Config() {
                 </View>
 
                 <View className="items-start ml-6 mt-5">
-                    <Text className="text-[22px] text-initi-blue font-alegreya-sans text-white">
+                    <Text className="text-[22px] font-alegreya-sans text-white">
                         Email
                     </Text>
                 </View>
 
                 <View className="items-start ml-6 mt-1" >
-                    <Text className="text-[18px] text-initi-blue font-alegreya-sans" style={{ color: '#d3d3d3' }}>
+                    <Text className="text-[18px] font-alegreya-sans" style={{ color: '#d3d3d3' }}>
                         {email}
                     </Text>
                 </View>
 
                 <View className="items-start ml-6 mt-10">
-                    <Text className="text-[25px] text-initi-blue font-alegreya-sans text-white font-serif">
+                    <Text className="text-[25px] font-alegreya-sans text-white font-serif">
                         Informações Muttu:
                     </Text>
                 </View>
@@ -122,15 +121,6 @@ export default function Config() {
                                 className="w-8 h-8"
                                 style={{ tintColor: '#ffffff' }}
                                 source={require('@/assets/images/email.png')}
-                                resizeMode="contain"
-                            />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={() => router.push("https://www.google.com/maps/@-23.5731434,-46.6893129,3a,72.3y,55.65h,87.04t/data=!3m7!1e1!3m5!1si85v9_8PWX0FxQe3Qr7-oQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D2.955116448442695%26panoid%3Di85v9_8PWX0FxQe3Qr7-oQ%26yaw%3D55.64541481064011!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MDQwNi4wIKXMDSoASAFQAw%3D%3Dhttps://www.google.com/maps/@-23.5731434,-46.6893129,3a,72.3y,55.65h,87.04t/data=!3m7!1e1!3m5!1si85v9_8PWX0FxQe3Qr7-oQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D2.955116448442695%26panoid%3Di85v9_8PWX0FxQe3Qr7-oQ%26yaw%3D55.64541481064011!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MDQwNi4wIKXMDSoASAFQAw%3D%3D")}>
-                            <Image
-                                className="w-8 h-8"
-                                style={{ tintColor: '#ffffff' }}
-                                source={require('@/assets/images/localizacao.png')}
                                 resizeMode="contain"
                             />
                         </TouchableOpacity>

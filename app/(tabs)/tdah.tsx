@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity, Alert } from "react-native";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { Text, View,TouchableOpacity, Alert } from "react-native";
+import { Link, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, scaleIdAtom, Scale } from "../stores";
 import BottomNavBar from "./navbarPa";
@@ -38,19 +38,19 @@ export default function Tdah() {
       </View>
 
       <View className="items-start ml-[24px] mt-2">
-        <Text className="text-[19px] text-initi-blue font-alegreya-sans text-lg">
+        <Text className="text-[19px] font-alegreya-sans text-lg">
           {descriptionEscala}
         </Text>
       </View>
 
       <View className="items-start ml-[24px] mt-72">
-        <Text className="text-[19px] text-initi-blue font-alegreya-sans text-lg">
+        <Text className="text-[19px] font-alegreya-sans text-lg">
           Deseja Iniciar esta escala?
         </Text>
       </View>
 
       <View className="items-start ml-[24px] -mt-2">
-        <Text className="text-[14px] text-initi-blue font-alegreya-sans text-lg">
+        <Text className="text-[14px] font-alegreya-sans text-lg">
           Número de Questões: {questionsEscala}
         </Text>
       </View>

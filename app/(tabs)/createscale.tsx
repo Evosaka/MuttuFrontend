@@ -27,7 +27,6 @@ export default function CreateScale() {
   const [scales, setScales] = useAtom(scalesAtom);
   const [loading, setLoading] = useState(false);
 
-  // Estados do formulário
   const [scaleName, setScaleName] = useState("");
   const [scaleDescription, setScaleDescription] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -41,7 +40,6 @@ export default function CreateScale() {
   ]);
   const [isNumericType, setIsNumericType] = useState(false);
 
-  // Estados temporários para novos itens
   const [newQuestion, setNewQuestion] = useState("");
   const [newOption, setNewOption] = useState("");
   const [newOptionValue, setNewOptionValue] = useState("");
@@ -225,7 +223,7 @@ export default function CreateScale() {
       <View className="flex-1 bg-[#E8C4AC] p-4">
         <ScrollView className="mt-4">
           <View className="items-start mt-20">
-            <Text className="text-[22px] text-initi-bluefText font-serif">
+            <Text className="text-[22px] font-serif text-2xl font-bold text-[#2D4990]">
               Criar Nova Escala
             </Text>
           </View>

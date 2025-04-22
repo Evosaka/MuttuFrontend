@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity, Alert } from "react-native";
+import { Text, View, Image, TouchableOpacity,} from "react-native";
 import { Link } from 'expo-router';
 import { useAtom } from 'jotai';
-import { scalesAtom, questionsAtom, Scale } from '../stores';
+import { scalesAtom,Scale ,patientsAtom, Patient } from '../stores';
 
 export default function Welcome() {
   const [, setScales] = useAtom(scalesAtom);
   const [loading, setLoading] = useState(true);
+  const [, setPatients] = useAtom(patientsAtom);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Busca escalas
         const scalesResponse = await fetch('https://muttu-backend.vercel.app/api/all-scales');
         const scalesData: Scale[] = await scalesResponse.json();
         setScales(scalesData);
+
+        // Busca pacientes
+        const patientsResponse = await fetch('https://muttu-backend.vercel.app/api/patients');
+        const patientsData: Patient[] = await patientsResponse.json();
+        setPatients(patientsData);
       } catch (error) {
         console.error("Erro ao carregar dados:", error);
       } finally {
@@ -27,7 +34,10 @@ export default function Welcome() {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-[#E8C4AC]">
-        <Text>Carregando...</Text>
+        <Text className="text-[20px] text-center">
+          Carrecando Dados Muttu!
+        </Text>
+        <Image className="w-20 h-20" source={require('@/assets/images/logo-muttu.png')} />
       </View>
     );
   }

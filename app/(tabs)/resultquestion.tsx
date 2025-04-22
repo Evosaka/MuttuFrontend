@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, TouchableOpacity } from "react-native";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { Text, View,TouchableOpacity } from "react-native";
+import {useLocalSearchParams, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, scaleIdAtom } from "../stores";
 import BottomNavBar from "./navbarPa";
@@ -69,7 +69,7 @@ export default function ResultQuestion() {
             </View>
 
             <View className="items-start ml-4 mt-32 p-5">
-                <Text className=" text-[14px] text-initi-blue font-alegreya-sans text-lg text-start">
+                <Text className=" text-[14px] font-alegreya-sans text-lg text-start">
                     {result?.resultDescription || "Um resultado gerado pela equipe sera disponibilizado em breve."}
                 </Text>
             </View>

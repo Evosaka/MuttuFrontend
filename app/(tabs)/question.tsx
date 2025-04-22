@@ -81,9 +81,9 @@ export default function QuestionScreen() {
 
       const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(result.message || "Erro ao enviar respostas");
-      }
+      // if (!response.ok) {
+      //   throw new Error(result.message || "Erro ao enviar respostas");
+      // }
 
       setScales((prevScales) =>
         prevScales.map((scale) =>
@@ -96,8 +96,8 @@ export default function QuestionScreen() {
           pathname: "/resultquestion",
           params: { result: JSON.stringify(result) },
         });
-      } else if (result.error === "Patient has already completed this scale") {
-        Alert.alert("Atenção", "Você já respondeu essa escala anteriormente.");
+       } else if (result.error === "Patient has already completed this scale") {
+      //   Alert.alert("Atenção", "Você já respondeu essa escala anteriormente.");
         router.push("/home");
       }
     } catch (error) {

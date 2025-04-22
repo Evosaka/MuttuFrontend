@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, Image, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from "react-native";
+import React, { useState,} from "react";
+import { Text, View, TouchableOpacity, ScrollView, ActivityIndicator, Alert } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { useAtom } from "jotai";
 import { scalesAtom, usernameAtom, } from '../stores';
@@ -202,7 +202,7 @@ export default function PatientScaleAssociation() {
   return (
     <View className="flex-1 bg-[#E8C4AC]">
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 60 }}>
-        <Text className="text-2xl font-bold text-[#2D4990] mb-4 mt-16">Pacientes</Text>
+        <Text className="text-2xl font-bold text-[#2D4990] font-serif mb-4 mt-16">Pacientes</Text>
 
         {patients.map((patient) => (
           <View key={patient.id} className="mb-4 bg-[#ffffff7b] rounded-lg p-4">

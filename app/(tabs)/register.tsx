@@ -1,15 +1,5 @@
-
-
-
 import React, { Component, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Alert,
-} from "react-native";
+import {Text,View,TouchableOpacity,TextInput,Alert,} from "react-native";
 import {Link, router} from 'expo-router'
 
 
